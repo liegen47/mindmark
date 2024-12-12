@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
       type,
       token_hash:token,
     })
-    console.log(error)
+    
     if (!error) {
       redirectTo.searchParams.delete('next')
       return NextResponse.redirect(redirectTo)
