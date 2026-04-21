@@ -1,12 +1,12 @@
-import React from "react";
-import { Subscription } from "@/lib/supabase/supabase.types";
-import db from "@/lib/supabase/db";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import ModeToggle from "../global/mode-toggle";
-import { LogOut } from "lucide-react";
-import LogoutButton from "../global/logout-button";
-import CypressProfileIcon from "../icons/cypressProfileIcon";
-import { createClient } from "@/utils/supabase/server";
+import React from 'react';
+import { Subscription } from '@/lib/supabase/supabase.types';
+import db from '@/lib/supabase/db';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import CypressProfileIcon from '../icons/cypressProfileIcon';
+import ModeToggle from '../global/mode-toggle';
+import { LogOut } from 'lucide-react';
+import LogoutButton from '../global/logout-button';
+import { createClient } from '@/utils/supabase/server';
 
 interface UserCardProps {
   subscription: Subscription | null;
@@ -24,10 +24,10 @@ const UserCard: React.FC<UserCardProps> = async ({ subscription }) => {
   });
   let avatarPath;
   if (!response) return null;
-  if (!response.avatarUrl) avatarPath = "";
+  if (!response.avatarUrl) avatarPath = '';
   else {
     avatarPath = supabase.storage
-      .from("avatars")
+      .from('avatars')
       .getPublicUrl(response.avatarUrl)?.data.publicUrl;
   }
   const profile = {
@@ -56,7 +56,7 @@ const UserCard: React.FC<UserCardProps> = async ({ subscription }) => {
         </Avatar>
         <div className="flex flex-col">
           <span className="text-muted-foreground">
-            {subscription?.status === "active" ? "Pro Plan" : "Free Plan"}
+            {subscription?.status === 'active' ? 'Pro Plan' : 'Free Plan'}
           </span>
           <small
             className="w-[100px] 

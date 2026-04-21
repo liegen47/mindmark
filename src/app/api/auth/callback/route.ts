@@ -4,29 +4,16 @@ import { createClient } from '@/utils/supabase/server'
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url)
-  const token = searchParams.get('token')
-  const type = searchParams.get('type') as EmailOtpType | null
-  const next = '/dashboard'
+  const code = searchParams.get('code')
+  const next = searchParams.get('next') ?? '/dashboard'
 
-  const redirectTo = request.nextUrl.clone()
-  redirectTo.pathname = next
-  redirectTo.searchParams.delete('token')
-  redirectTo.searchParams.delete('type')
-
-  if (token && type) {
+  if (code) {
     const supabase = await createClient()
-
-    const { error } = await supabase.auth.verifyOtp({
-      type,
-      token_hash:token,
-    })
-    
+    const { error } = await supabase.auth.exchangeCodeForSession(code)
     if (!error) {
-      redirectTo.searchParams.delete('next')
-      return NextResponse.redirect(redirectTo)
+      return NextResponse.redirect(new URL(next, request.url))
     }
   }
 
-  redirectTo.pathname = '/error'
-  return NextResponse.redirect(redirectTo)
+  return NextResponse.redirect(new URL('/auth/auth-code-error', request.url))
 }

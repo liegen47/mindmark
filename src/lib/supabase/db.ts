@@ -1,27 +1,36 @@
-import { drizzle } from 'drizzle-orm/postgres-js';
-import postgres from 'postgres';
-import * as dotenv from 'dotenv';
-import * as schema from '../../../migrations/schema';
-import { migrate } from 'drizzle-orm/postgres-js/migrator';
-
-dotenv.config({ path: '.env' });
+import { drizzle } from "drizzle-orm/postgres-js";
+import postgres from "postgres";
+import * as schema from "../../../migrations/schema";
+import * as relations from "../../../migrations/relations";
+import type { Sql } from "postgres";
 
 if (!process.env.DATABASE_URL) {
-  console.log('🔴 no database URL');
+  throw new Error("DATABASE_URL is required");
 }
 
-const client = postgres(process.env.DATABASE_URL!);
-const db = drizzle(client, { schema });
-
-
-const migrateDb = async () => {
-  try {
-    console.log('🟠 Migrating client');
-    await migrate(db, { migrationsFolder: 'migrations' });
-    console.log('🟢 Successfully Migrated');
-  } catch (error) {
-    console.log('🔴 Error Migrating client', error);
-  }
+const globalForDb = globalThis as unknown as {
+  postgresClient?: Sql;
 };
-migrateDb();
- export default db;
+
+const connectionString =
+  process.env.DATABASE_URL_POOLED ?? process.env.DATABASE_URL;
+
+// IMPORTANT: When using Supabase pooling with postgres-js in serverless, 
+// make sure to use port 6543 (Transaction Mode) in your connection string 
+// to avoid (EMAXCONNSESSION) "max clients reached in session mode" errors.
+const client =
+  globalForDb.postgresClient ??
+  postgres(connectionString, {
+    prepare: false,
+    max: 1,
+    idle_timeout: 1,
+    max_lifetime: 10,
+  });
+
+if (process.env.NODE_ENV !== "production") {
+  globalForDb.postgresClient = client;
+}
+
+const db = drizzle(client, { schema: { ...schema, ...relations } });
+
+export default db;

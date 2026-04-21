@@ -8,7 +8,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import clsx from "clsx";
-import { ScrollArea } from "../ui/scroll-area";
 
 interface CustomDialogTriggerProps {
   header?: string;
@@ -27,16 +26,27 @@ const CustomDialogTrigger: React.FC<CustomDialogTriggerProps> = ({
 }) => {
   return (
     <Dialog>
-      <DialogTrigger className={clsx("", className)}>{children}</DialogTrigger>
-
-      <DialogContent className="h-screen block sm:h-[440px] w-full">
-        <ScrollArea className="h-full w-full">
-          <DialogHeader>
-            <DialogTitle>{header}</DialogTitle>
-            <DialogDescription>{description}</DialogDescription>
-          </DialogHeader>
+      <DialogTrigger className={clsx('w-full', className)}>
+        {children}
+      </DialogTrigger>
+      <DialogContent
+        className="
+        max-w-lg
+        h-[550px]
+        overflow-hidden
+        flex
+        flex-col
+        gap-0
+        p-0
+      "
+      >
+        <DialogHeader className="p-6 pb-2">
+          <DialogTitle>{header}</DialogTitle>
+          <DialogDescription>{description}</DialogDescription>
+        </DialogHeader>
+        <div className="flex-1 overflow-hidden">
           {content}
-        </ScrollArea>
+        </div>
       </DialogContent>
     </Dialog>
   );

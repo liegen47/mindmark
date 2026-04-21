@@ -1,9 +1,9 @@
-import DashboardSetup from "@/components/dashboard-setup/dashboard-setup";
-import db from "@/lib/supabase/db";
-import { getUserSubscriptionStatus } from "@/lib/supabase/queries";
-import { createClient } from "@/utils/supabase/server";
-import { redirect } from "next/navigation";
-import React from "react";
+import React from 'react';
+import db from '@/lib/supabase/db';
+import { redirect } from 'next/navigation';
+import DashboardSetup from '@/components/dashboard-setup/dashboard-setup';
+import { getUserSubscriptionStatus } from '@/lib/supabase/queries';
+import { createClient } from '@/utils/supabase/server';
 
 const DashboardPage = async () => {
   const supabase = await createClient();
@@ -12,29 +12,39 @@ const DashboardPage = async () => {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) redirect("/login");
+  if (!user) redirect('/login');
 
-  const workspace = await db.query.workspaces.findFirst({
-    where: (workspace, { eq }) => eq(workspace.workspaceOwner, user.id),
-  });
+  let workspace: Awaited<ReturnType<typeof db.query.workspaces.findFirst>>;
+  try {
+    workspace = await db.query.workspaces.findFirst({
+      where: (workspace, { eq }) => eq(workspace.workspaceOwner, user.id),
+    });
+  } catch (error) {
+    console.error('Dashboard workspace query failed', error);
+  }
 
   const { data: subscription, error: subscriptionError } =
     await getUserSubscriptionStatus(user.id);
 
-  if (subscriptionError) return;
+  if (subscriptionError) {
+    console.error('Dashboard subscription query failed', subscriptionError);
+  }
 
   if (!workspace)
     return (
       <div
         className="bg-background
-          h-screen
-          w-screen
-          flex
-          justify-center
-          items-center
-    "
+        h-screen
+        w-screen
+        flex
+        justify-center
+        items-center
+  "
       >
-        <DashboardSetup user={user} subscription={subscription} />
+        <DashboardSetup
+          user={user}
+          subscription={subscription ?? null}
+        />
       </div>
     );
 

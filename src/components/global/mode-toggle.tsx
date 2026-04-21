@@ -1,5 +1,5 @@
 'use client';
-import { useTheme } from 'next-themes';
+import { useTheme } from '@/lib/providers/next-theme-provider';
 import React from 'react';
 import { Button } from '../ui/button';
 import { Moon, Sun } from 'lucide-react';
@@ -11,6 +11,7 @@ const ModeToggle = () => {
       variant={'outline'}
       size="icon"
       onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+      className='rounded-full'
     >
       <Sun
         className="h-[1.2rem] 

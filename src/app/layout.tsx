@@ -1,9 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { ThemeProvider } from "@/lib/providers/next-theme-provider";
-import AppStateProvider from "@/lib/providers/state-provider";
 import { Toaster } from "@/components/ui/toaster";
-import { SupabaseUserProvider } from "@/lib/providers/supabase-user-provider";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -17,13 +15,29 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head />
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function() {
+                try {
+                  var theme = localStorage.getItem('theme') || 'dark';
+                  var supportDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches === true;
+                  if (theme === 'dark' || (theme === 'system' && supportDarkMode)) {
+                    document.documentElement.classList.add('dark');
+                  } else {
+                    document.documentElement.classList.remove('dark');
+                  }
+                } catch (e) {}
+              })();
+            `,
+          }}
+        />
+      </head>
       <body>
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-          <AppStateProvider>
-            <SupabaseUserProvider>{children} </SupabaseUserProvider>
-            <Toaster />
-          </AppStateProvider>
+        <ThemeProvider defaultTheme="dark">
+          {children}
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>

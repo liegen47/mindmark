@@ -1,17 +1,19 @@
-"use client";
-import { useAppState } from "@/lib/providers/state-provider";
-import { workspace } from "@/lib/supabase/supabase.types";
-import React, { useEffect, useState } from "react";
-import SelectedWorkspace from "./selected-workspace";
-import CustomDialogTrigger from "../global/custom-dialog-trigger";
-import WorkspaceCreator from "../global/workspace-creator";
-import { ScrollArea } from "../ui/scroll-area";
+'use client';
+
+import { useAppState } from '@/lib/providers/state-provider';
+import { workspace } from '@/lib/supabase/supabase.types';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Plus } from 'lucide-react';
+import SelectedWorkspace from './selected-workspace';
+import CustomDialogTrigger from '../global/custom-dialog-trigger';
+import WorkspaceCreator from '../global/workspace-creator';
+import { ScrollArea } from '../ui/scroll-area';
 
 interface WorkspaceDropdownProps {
   privateWorkspaces: workspace[] | [];
   sharedWorkspaces: workspace[] | [];
   collaboratingWorkspaces: workspace[] | [];
-  defaultValue: workspace | undefined;
+  defaultValue: string;
 }
 
 const WorkspaceDropdown: React.FC<WorkspaceDropdownProps> = ({
@@ -21,13 +23,12 @@ const WorkspaceDropdown: React.FC<WorkspaceDropdownProps> = ({
   defaultValue,
 }) => {
   const { dispatch, state } = useAppState();
-  const [selectedOption, setSelectedOption] = useState(defaultValue);
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     if (!state.workspaces.length) {
       dispatch({
-        type: "SET_WORKSPACES",
+        type: 'SET_WORKSPACES',
         payload: {
           workspaces: [
             ...privateWorkspaces,
@@ -45,92 +46,98 @@ const WorkspaceDropdown: React.FC<WorkspaceDropdownProps> = ({
     state.workspaces.length,
   ]);
 
-  const handleSelect = (option: workspace) => {
-    setSelectedOption(option);
+  const selectedOption = useMemo(
+    () =>
+      state.workspaces.find((workspace) => workspace.id === defaultValue),
+    [state.workspaces, defaultValue]
+  );
+
+  const handleSelect = () => {
     setIsOpen(false);
   };
 
-  useEffect(() => {
-    const findSelectedWorkspace = state.workspaces.find(
-      (workspace) => workspace.id === defaultValue?.id
-    );
-    if (findSelectedWorkspace) setSelectedOption(findSelectedWorkspace);
-  }, [state, defaultValue]);
-
   return (
-    <div
-      className=" relative inline-block
-      text-left
-  "
-    >
-      <div>
-        <span onClick={() => setIsOpen(!isOpen)}>
-          {selectedOption ? (
-            <SelectedWorkspace workspace={selectedOption} />
-          ) : (
-            "Select a workspace"
-          )}
-        </span>
-      </div>
+    <div className="relative w-full text-left">
+      <button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full text-left"
+      >
+        {selectedOption ? (
+          <SelectedWorkspace workspace={selectedOption} />
+        ) : (
+          'Select a workspace'
+        )}
+      </button>
       {isOpen && (
-        <ScrollArea
-          className="origin-top-right
-          absolute
+        <div
+          className="absolute
+          top-full
+          left-0
           w-full
-          rounded-md
-          shadow-md
           z-50
-          h-[190px]
+          mt-2
+          rounded-md
+          shadow-xl
           bg-black/10
           backdrop-blur-lg
-          group
           border-[1px]
           border-muted
-      "
+          overflow-hidden
+        "
         >
-          <div className="rounded-md flex flex-col">
-            <div className="!p-2">
-              {!!privateWorkspaces.length && (
-                <>
-                  <p className="text-muted-foreground">Private</p>
-                  <hr></hr>
-                  {privateWorkspaces.map((option) => (
-                    <SelectedWorkspace
-                      key={option.id}
-                      workspace={option}
-                      onClick={handleSelect}
-                    />
-                  ))}
-                </>
-              )}
-              {!!sharedWorkspaces.length && (
-                <>
-                  <p className="text-muted-foreground">Shared</p>
-                  <hr />
-                  {sharedWorkspaces.map((option) => (
-                    <SelectedWorkspace
-                      key={option.id}
-                      workspace={option}
-                      onClick={handleSelect}
-                    />
-                  ))}
-                </>
-              )}
-              {!!collaboratingWorkspaces.length && (
-                <>
-                  <p className="text-muted-foreground">Collaborating</p>
-                  <hr />
-                  {collaboratingWorkspaces.map((option) => (
-                    <SelectedWorkspace
-                      key={option.id}
-                      workspace={option}
-                      onClick={handleSelect}
-                    />
-                  ))}
-                </>
-              )}
+          <ScrollArea className="h-[200px]">
+            <div className="rounded-md flex flex-col">
+              <div className="p-2">
+                {!!privateWorkspaces.length && (
+                  <div className="flex flex-col gap-1">
+                    <p className="text-muted-foreground text-xs uppercase font-bold p-2">
+                      Private
+                    </p>
+                    <hr className="opacity-10 mb-1 bg-muted border-muted" />
+                    {privateWorkspaces.map((option) => (
+                      <SelectedWorkspace
+                        key={option.id}
+                        workspace={option}
+                        onClick={handleSelect}
+                      />
+                    ))}
+                  </div>
+                )}
+                {!!sharedWorkspaces.length && (
+                  <div className="flex flex-col gap-1 mt-4">
+                    <p className="text-muted-foreground text-xs uppercase font-bold p-2">
+                      Shared
+                    </p>
+                    <hr className="border-muted mb-1" />
+                    {sharedWorkspaces.map((option) => (
+                      <SelectedWorkspace
+                        key={option.id}
+                        workspace={option}
+                        onClick={handleSelect}
+                      />
+                    ))}
+                  </div>
+                )}
+                {!!collaboratingWorkspaces.length && (
+                  <div className="flex flex-col gap-1 mt-4">
+                    <p className="text-muted-foreground text-xs uppercase font-bold p-2">
+                      Collaborating
+                    </p>
+                    <hr className="border-muted mb-1" />
+                    {collaboratingWorkspaces.map((option) => (
+                      <SelectedWorkspace
+                        key={option.id}
+                        workspace={option}
+                        onClick={handleSelect}
+                      />
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
-
+          </ScrollArea>
+          <div className="p-2 border-t border-muted">
             <CustomDialogTrigger
               header="Create A Workspace"
               content={<WorkspaceCreator />}
@@ -138,31 +145,36 @@ const WorkspaceDropdown: React.FC<WorkspaceDropdownProps> = ({
             >
               <div
                 className="flex 
-              transition-all 
-              hover:bg-muted 
-              justify-center 
-              items-center 
-              gap-2 
-              p-2 
-              w-full"
+                transition-all 
+                hover:bg-muted/50
+                justify-center 
+                items-center 
+                gap-2 
+                p-2 
+                w-full
+                border
+                border-muted
+                rounded-md
+                text-sm
+                font-medium"
               >
                 <article
                   className="text-slate-500 
-                rounded-full
-                 bg-slate-800 
-                 w-4 
-                 h-4 
-                 flex 
-                 items-center 
-                 justify-center"
+                  rounded-full
+                   bg-slate-800/50
+                   w-4 
+                   h-4 
+                   flex 
+                   items-center 
+                   justify-center"
                 >
-                  +
+                  <Plus className="w-3 h-3" />
                 </article>
                 Create workspace
               </div>
             </CustomDialogTrigger>
           </div>
-        </ScrollArea>
+        </div>
       )}
     </div>
   );

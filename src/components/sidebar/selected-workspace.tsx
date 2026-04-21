@@ -1,8 +1,10 @@
 "use client";
+
 import { workspace } from "@/lib/supabase/supabase.types";
-import { createClient } from "@/utils/supabase/client";
+import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
+import { createClient } from "@/utils/supabase/client";
 
 interface SelectedWorkspaceProps {
   workspace: workspace;
@@ -13,47 +15,49 @@ const SelectedWorkspace: React.FC<SelectedWorkspaceProps> = ({
   workspace,
   onClick,
 }) => {
-  const supabase = createClient();
   const [workspaceLogo, setWorkspaceLogo] = useState("/mindmarklogo.svg");
+
   useEffect(() => {
     if (workspace.logo) {
+      const supabase = createClient();
       const path = supabase.storage
         .from("workspace-logos")
         .getPublicUrl(workspace.logo)?.data.publicUrl;
       setWorkspaceLogo(path);
     }
-  }, [workspace]);
+  }, [workspace.logo]);
+
   return (
     <Link
       href={`/dashboard/${workspace.id}`}
       onClick={() => {
         if (onClick) onClick(workspace);
       }}
-      className="flex 
-      rounded-md 
-      hover:bg-muted 
-      transition-all 
-      flex-row 
-      p-2 
-      gap-4 
-      justify-center 
-      cursor-pointer 
-      items-center 
-      my-2"
+      className="flex
+      rounded-md
+      hover:bg-muted
+      transition-all
+      flex-row
+      p-2
+      gap-4
+      justify-center
+      cursor-pointer
+      items-center
+     "
     >
-      <img
+      <Image
         src={workspaceLogo}
         alt="workspace logo"
         width={26}
         height={26}
-        className="h-[26px] w-[26px] rounded-md object-cover"
+        className="object-cover"
       />
       <div className="flex flex-col">
         <p
-          className="text-lg 
-        w-[170px] 
-        overflow-hidden 
-        overflow-ellipsis 
+          className="text-lg
+        w-[170px]
+        overflow-hidden
+        overflow-ellipsis
         whitespace-nowrap"
         >
           {workspace.title}
