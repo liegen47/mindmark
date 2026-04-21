@@ -139,6 +139,11 @@ export const updateWorkspace = async (
   }
 };
   
+export const deleteWorkspace = async (workspaceId: string) => {
+  if (!workspaceId) return;
+  await db.delete(workspaces).where(eq(workspaces.id, workspaceId));
+};
+
 export const getFolders = async (workspaceId: string) => {
   const isValid = validate(workspaceId);
   if (!isValid)

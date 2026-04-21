@@ -101,20 +101,19 @@ const FoldersDropdownList: React.FC<FoldersDropdownListProps> = ({
         w-full  
         h-10 
         group/title 
-        justify-between 
-        items-center 
-        pr-4 
-        text-Neutrals/neutrals-8
-  "
-      >
+        justify-between
+        items-center
+        pr-4
+        text-neutrals-8
+        "
+        >
         <span
-          className="text-Neutrals-8 
-        font-bold 
+          className="text-neutrals-8
+        font-bold
         text-xs"
         >
           FOLDERS
-        </span>
-        <TooltipComponent message="Create Folder">
+        </span>        <TooltipComponent message="Create Folder">
           <PlusIcon
             onClick={addFolderHandler}
             size={16}

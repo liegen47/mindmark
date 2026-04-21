@@ -1,3 +1,5 @@
+"use client"
+
 import * as React from "react"
 
 import type {
@@ -16,16 +18,16 @@ type ToasterToast = ToastProps & {
 }
 
 type ActionType = {
-  ADD_TOAST: "ADD_TOAST"
-  UPDATE_TOAST: "UPDATE_TOAST"
-  DISMISS_TOAST: "DISMISS_TOAST"
-  REMOVE_TOAST: "REMOVE_TOAST"
+  ADD_TOAST: "ADD_TOAST",
+  UPDATE_TOAST: "UPDATE_TOAST",
+  DISMISS_TOAST: "DISMISS_TOAST",
+  REMOVE_TOAST: "REMOVE_TOAST",
 }
 
 let count = 0
 
 function genId() {
-  count = (count + 1) % Number.MAX_VALUE
+  count = (count + 1) % Number.MAX_SAFE_INTEGER
   return count.toString()
 }
 

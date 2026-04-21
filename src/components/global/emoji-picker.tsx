@@ -1,4 +1,5 @@
 "use client";
+import type { EmojiClickData } from "emoji-picker-react";
 import dynamic from "next/dynamic";
 import React from "react";
 
@@ -15,7 +16,7 @@ interface EmojiPickerProps {
 
 const EmojiPicker: React.FC<EmojiPickerProps> = ({ children, getValue }) => {
   const Picker = dynamic(() => import("emoji-picker-react"), { ssr: false });
-  const onClick = (selectedEmoji: any) => {
+  const onClick = (selectedEmoji: EmojiClickData) => {
     if (getValue) getValue(selectedEmoji.emoji);
   };
   return (

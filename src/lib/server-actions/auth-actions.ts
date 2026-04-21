@@ -16,20 +16,25 @@ export async function actionLoginUser({
   return response;
 }
 
-export async function actionSignUpUser({
-  email,
-  password,
-}: z.infer<typeof FormSchema>) {
-  const supabase = await createClient( );
-  const { data } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('email', email);
+export async function actionSignUpUser(formData: z.infer<typeof FormSchema>) {
+  console.log('actionSignUpUser payload', formData);
+  const parsed = FormSchema.safeParse({
+    email: formData?.email?.trim(),
+    password: formData?.password,
+  });
 
-  if (data?.length) return { error: { message: 'User already exists', data } };
+  if (!parsed.success) {
+    return {
+      error: {
+        message: parsed.error.issues[0]?.message ?? 'Invalid signup payload',
+      },
+    };
+  }
+
+  const supabase = await createClient();
   const response = await supabase.auth.signUp({
-    email,
-    password,
+    email: parsed.data.email,
+    password: parsed.data.password,
     options: {
       emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}api/auth/callback`,
     },

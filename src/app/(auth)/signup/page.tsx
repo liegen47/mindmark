@@ -14,16 +14,16 @@ import clsx from "clsx";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import React, { useMemo, useState } from "react";
-import { useForm } from "react-hook-form";
+import React, { useMemo, useState, Suspense } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 
 import Logo from "../../../../public/mindmarklogo.svg";
 import Loader from "@/components/global/Loader";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { MailCheck } from "lucide-react";
-import { FormSchema } from "@/lib/types";
 import { actionSignUpUser } from "@/lib/server-actions/auth-actions";
+import { FormLabel } from "@/components/ui/form";
 
 const SignUpFormSchema = z
   .object({
@@ -42,7 +42,7 @@ const SignUpFormSchema = z
     path: ["confirmPassword"],
   });
 
-const Signup = () => {
+const SignUpForm = () => {
   const searchParams = useSearchParams();
   const [submitError, setSubmitError] = useState("");
   const [confirmation, setConfirmation] = useState(false);
@@ -69,7 +69,11 @@ const Signup = () => {
   });
 
   const isLoading = form.formState.isSubmitting;
-  const onSubmit = async ({ email, password }: z.infer<typeof FormSchema>) => {
+  const onSubmit: SubmitHandler<z.infer<typeof SignUpFormSchema>> = async (
+    formData
+  ) => {
+    console.log("signup formData", formData);
+    const { email, password } = formData;
     const { error } = await actionSignUpUser({ email, password });
     if (error) {
       setSubmitError(error.message);
@@ -115,49 +119,44 @@ const Signup = () => {
         </FormDescription>
         {!confirmation && !codeExchangeError && (
           <>
-            <FormField
-              disabled={isLoading}
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input type="email" placeholder="Email" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              disabled={isLoading}
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input type="password" placeholder="Password" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              disabled={isLoading}
-              control={form.control}
-              name="confirmPassword"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input
-                      type="password"
-                      placeholder="Confirm Password"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input
+                  type="email"
+                  placeholder="Email"
+                  disabled={isLoading}
+                  {...form.register("email")}
+                />
+              </FormControl>
+              <FormMessage>{form.formState.errors.email?.message}</FormMessage>
+            </FormItem>
+            <FormItem>
+              <FormLabel>Password</FormLabel>
+              <FormControl>
+                <Input
+                  type="password"
+                  placeholder="Password"
+                  disabled={isLoading}
+                  {...form.register("password")}
+                />
+              </FormControl>
+              <FormMessage>{form.formState.errors.password?.message}</FormMessage>
+            </FormItem>
+            <FormItem>
+              <FormLabel>Confirm Password</FormLabel>
+              <FormControl>
+                <Input
+                  type="password"
+                  placeholder="Confirm Password"
+                  disabled={isLoading}
+                  {...form.register("confirmPassword")}
+                />
+              </FormControl>
+              <FormMessage>
+                {form.formState.errors.confirmPassword?.message}
+              </FormMessage>
+            </FormItem>
             <Button type="submit" className="w-full p-6" disabled={isLoading}>
               {!isLoading ? "Create Account" : <Loader />}
             </Button>
@@ -186,6 +185,14 @@ const Signup = () => {
         )}
       </form>
     </Form>
+  );
+};
+
+const Signup = () => {
+  return (
+    <Suspense fallback={<Loader />}>
+      <SignUpForm />
+    </Suspense>
   );
 };
 

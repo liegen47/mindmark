@@ -1,7 +1,6 @@
-import React, { FC } from 'react';
+import React from 'react';
 
-interface CypressMessageIconProps {}
-const CypressMessageIcon: FC<CypressMessageIconProps> = () => {
+const CypressMessageIcon = () => {
   return (
     <svg
       width="24"
@@ -20,7 +19,7 @@ const CypressMessageIcon: FC<CypressMessageIconProps> = () => {
       />
       <path
         d="M10.91 12.2915L2 6.5C2 5.11929 3.11929 4 4.5 4H19.5C20.8807 4 22 5.11929 22 6.5L13.09 12.2915C12.4272 12.7223 11.5728 12.7223 10.91 12.2915Z"
-        className={`dark:fill-[#817EB5]  fill-Neutrals/neutrals-7 transition-all group-hover/native:fill-washed-blue-500`}
+        className={`dark:fill-[#817EB5]  fill-neutrals-7 transition-all group-hover/native:fill-washed-blue-500`}
       />
     </svg>
   );

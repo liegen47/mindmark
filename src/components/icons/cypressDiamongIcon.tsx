@@ -1,7 +1,6 @@
-import React, { FC } from 'react';
+import React from 'react';
 
-interface CypressDiamondIconProps {}
-const CypressDiamondIcon: FC<CypressDiamondIconProps> = () => {
+const CypressDiamondIcon = () => {
   return (
     <svg
       viewBox="0 0 24 24"

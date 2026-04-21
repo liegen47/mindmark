@@ -43,7 +43,7 @@ const UserCard: React.FC<UserCardProps> = async ({ subscription }) => {
       items-center 
       px-4 
       py-2 
-      dark:bg-Neutrals/neutrals-12
+      dark:bg-neutrals-12
       rounded-3xl
   "
     >

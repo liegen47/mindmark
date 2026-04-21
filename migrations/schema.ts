@@ -1,5 +1,11 @@
-import { pgTable, uuid, timestamp, text, foreignKey, pgPolicy, jsonb, boolean, check, bigint, integer, pgEnum } from "drizzle-orm/pg-core"
+import { pgTable, uuid, timestamp, text, foreignKey, pgPolicy, jsonb, boolean, check, bigint, integer, pgEnum, pgSchema } from "drizzle-orm/pg-core"
 import { sql } from "drizzle-orm"
+
+export const authSchema = pgSchema("auth");
+
+export const usersInAuth = authSchema.table("users", {
+	id: uuid("id").primaryKey().notNull(),
+});
 
 export const pricingPlanInterval = pgEnum("pricing_plan_interval", ['day', 'week', 'month', 'year'])
 export const pricingType = pgEnum("pricing_type", ['one_time', 'recurring'])
@@ -74,7 +80,7 @@ export const users = pgTable("users", {
 	return {
 		usersIdFkey: foreignKey({
 			columns: [table.id],
-			foreignColumns: [table.id],
+			foreignColumns: [usersInAuth.id],
 			name: "users_id_fkey"
 		}),
 		canUpdateOwnUserData: pgPolicy("Can update own user data.", { as: "permissive", for: "update", to: ["public"], using: sql`(( SELECT auth.uid() AS uid) = id)` }),

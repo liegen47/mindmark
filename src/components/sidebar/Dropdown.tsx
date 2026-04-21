@@ -315,7 +315,7 @@ const Dropdown: React.FC<DropdownProps> = ({ title, id, listType, iconId }) => {
               type="text"
               value={listType === "folder" ? folderTitle : fileTitle}
               className={clsx(
-                "outline-none overflow-hidden w-[140px] text-Neutrals/neutrals-7",
+                "outline-none overflow-hidden w-[140px] text-neutrals-7",
                 {
                   "bg-muted cursor-text": isEditing,
                   "bg-transparent cursor-pointer": !isEditing,
@@ -333,7 +333,7 @@ const Dropdown: React.FC<DropdownProps> = ({ title, id, listType, iconId }) => {
               <Trash
                 onClick={moveToTrash}
                 size={15}
-                className="hover:dark:text-white dark:text-Neutrals/neutrals-7 transition-colors"
+                className="hover:dark:text-white dark:text-neutrals-7 transition-colors"
               />
             </TooltipComponent>
             {listType === "folder" && !isEditing && (
@@ -341,7 +341,7 @@ const Dropdown: React.FC<DropdownProps> = ({ title, id, listType, iconId }) => {
                 <PlusIcon
                   onClick={addNewFile}
                   size={15}
-                  className="hover:dark:text-white dark:text-Neutrals/neutrals-7 transition-colors"
+                  className="hover:dark:text-white dark:text-neutrals-7 transition-colors"
                 />
               </TooltipComponent>
             )}

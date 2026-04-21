@@ -5,11 +5,11 @@ import React from "react";
 
 interface LayoutProps {
   children: React.ReactNode;
-  params: { workspaceId: string };
+  params: Promise<{ workspaceId: string }>;
 }
 
 const Layout: React.FC<LayoutProps> = async ({ children, params }) => {
-  const { workspaceId } = params;
+  const { workspaceId } = await params;
   return (
     <main
       className="flex overflow-hidden
@@ -22,14 +22,13 @@ const Layout: React.FC<LayoutProps> = async ({ children, params }) => {
         <Sidebar params={params} className="w-screen inline-block sm:hidden" />
       </MobileSidebar> */}
       <ScrollArea
-        className="dark:border-Neutrals-12/70
+        className="dark:border-neutrals-12/70
         border-l-[1px]
         w-full
         relative
-        
+
       "
-      >
-        {children}
+      >        {children}
       </ScrollArea>
     </main>
   );

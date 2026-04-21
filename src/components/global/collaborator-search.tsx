@@ -30,7 +30,7 @@ const CollaboratorSearch: React.FC<CollaboratorSearchProps> = ({
 }) => {
   const { user } = useSupabaseUser();
   const [searchResults, setSearchResults] = useState<User[] | []>([]);
-  const timerRef = useRef<ReturnType<typeof setTimeout>>();
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => {
     return () => {
@@ -39,7 +39,7 @@ const CollaboratorSearch: React.FC<CollaboratorSearchProps> = ({
   }, []);
 
   const onChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (timerRef) clearTimeout(timerRef.current);
+    if (timerRef.current) clearTimeout(timerRef.current);
     timerRef.current = setTimeout(async () => {
       const res = await getUsersFromSearch(e.target.value);
       setSearchResults(res);
