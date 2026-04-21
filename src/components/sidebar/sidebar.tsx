@@ -28,7 +28,7 @@ const Sidebar: React.FC<SidebarProps> = async ({ workspaceId, className }) => {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) return;
+  if (!user) return null;
 
   //subscription
   const { data: subscriptionData, error: subscriptionError } =

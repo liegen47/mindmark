@@ -1,7 +1,6 @@
 "use client";
 import { workspace } from "@/lib/supabase/supabase.types";
 import { createClient } from "@/utils/supabase/client";
-import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
@@ -42,12 +41,12 @@ const SelectedWorkspace: React.FC<SelectedWorkspaceProps> = ({
       items-center 
       my-2"
     >
-      <Image
+      <img
         src={workspaceLogo}
         alt="workspace logo"
         width={26}
         height={26}
-        objectFit="cover"
+        className="h-[26px] w-[26px] rounded-md object-cover"
       />
       <div className="flex flex-col">
         <p

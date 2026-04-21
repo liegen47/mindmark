@@ -12,8 +12,8 @@ const DashboardPage = async () => {
     data: { user },
   } = await supabase.auth.getUser();
 
-  if (!user) return;
-  console.log(user);
+  if (!user) redirect("/login");
+
   const workspace = await db.query.workspaces.findFirst({
     where: (workspace, { eq }) => eq(workspace.workspaceOwner, user.id),
   });
