@@ -7,10 +7,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FormSchema } from "@/lib/types";
 import {
   Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
   FormMessage,
 } from "@/components/ui/form";
 import Link from "next/link";
@@ -70,12 +66,9 @@ const LoginPage = () => {
             Mindmark.
           </span>
         </Link>
-        <FormDescription
-          className="
-        text-foreground/60"
-        >
+        <p className="text-foreground/60 text-sm">
           An all-In-One Collaboration and Productivity Platform
-        </FormDescription>
+        </p>
         
         <div className="flex flex-col gap-2">
           <Input 

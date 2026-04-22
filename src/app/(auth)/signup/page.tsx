@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
@@ -110,12 +109,9 @@ const SignUpForm = () => {
             Mindmark.
           </span>
         </Link>
-        <FormDescription
-          className="
-        text-foreground/60"
-        >
+        <p className="text-foreground/60 text-sm">
           An all-In-One Collaboration and Productivity Platform
-        </FormDescription>
+        </p>
         {!confirmation && !codeExchangeError && (
           <>
             <FormItem>

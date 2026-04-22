@@ -7,7 +7,6 @@ import { UpdatePasswordSchema } from "@/lib/types";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormMessage,
@@ -56,9 +55,9 @@ const ResetPasswordPage = () => {
           Mindmark.
         </span>
       </Link>
-      <FormDescription className="text-foreground/60">
+      <p className="text-foreground/60 text-sm">
         Enter your new password below.
-      </FormDescription>
+      </p>
 
       <Form {...form}>
         <form

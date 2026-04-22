@@ -7,7 +7,6 @@ import { ForgotPasswordSchema } from "@/lib/types";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormMessage,
@@ -51,9 +50,9 @@ const ForgotPasswordPage = () => {
           Mindmark.
         </span>
       </Link>
-      <FormDescription className="text-foreground/60">
+      <p className="text-foreground/60 text-sm">
         Enter your email to receive a password reset link.
-      </FormDescription>
+      </p>
 
       {success ? (
         <Alert className="bg-primary/10 border-primary/20">
