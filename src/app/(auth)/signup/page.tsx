@@ -2,8 +2,6 @@
 import { Button } from "@/components/ui/button";
 import {
   Form,
-  FormControl,
-  FormItem,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -21,7 +19,6 @@ import Loader from "@/components/global/Loader";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { MailCheck } from "lucide-react";
 import { actionSignUpUser } from "@/lib/server-actions/auth-actions";
-import { FormLabel } from "@/components/ui/form";
 
 const SignUpFormSchema = z
   .object({
@@ -114,44 +111,45 @@ const SignUpForm = () => {
         </p>
         {!confirmation && !codeExchangeError && (
           <>
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input
-                  type="email"
-                  placeholder="Email"
-                  disabled={isLoading}
-                  {...form.register("email")}
-                />
-              </FormControl>
-              <FormMessage>{form.formState.errors.email?.message}</FormMessage>
-            </FormItem>
-            <FormItem>
-              <FormLabel>Password</FormLabel>
-              <FormControl>
-                <Input
-                  type="password"
-                  placeholder="Password"
-                  disabled={isLoading}
-                  {...form.register("password")}
-                />
-              </FormControl>
-              <FormMessage>{form.formState.errors.password?.message}</FormMessage>
-            </FormItem>
-            <FormItem>
-              <FormLabel>Confirm Password</FormLabel>
-              <FormControl>
-                <Input
-                  type="password"
-                  placeholder="Confirm Password"
-                  disabled={isLoading}
-                  {...form.register("confirmPassword")}
-                />
-              </FormControl>
-              <FormMessage>
-                {form.formState.errors.confirmPassword?.message}
-              </FormMessage>
-            </FormItem>
+            <div className="flex flex-col gap-2">
+              <Input
+                type="email"
+                placeholder="Email"
+                disabled={isLoading}
+                {...form.register("email")}
+              />
+              {form.formState.errors.email && (
+                <small className="text-destructive">
+                  {form.formState.errors.email.message}
+                </small>
+              )}
+            </div>
+            <div className="flex flex-col gap-2">
+              <Input
+                type="password"
+                placeholder="Password"
+                disabled={isLoading}
+                {...form.register("password")}
+              />
+              {form.formState.errors.password && (
+                <small className="text-destructive">
+                  {form.formState.errors.password.message}
+                </small>
+              )}
+            </div>
+            <div className="flex flex-col gap-2">
+              <Input
+                type="password"
+                placeholder="Confirm Password"
+                disabled={isLoading}
+                {...form.register("confirmPassword")}
+              />
+              {form.formState.errors.confirmPassword && (
+                <small className="text-destructive">
+                  {form.formState.errors.confirmPassword.message}
+                </small>
+              )}
+            </div>
             <Button type="submit" className="w-full p-6" disabled={isLoading}>
               {!isLoading ? "Create Account" : <Loader />}
             </Button>

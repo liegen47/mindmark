@@ -6,7 +6,6 @@ import Cal from "../../../public/cal.png";
 import Diamond from "../../../public/icons/diamond.svg";
 import CheckIcon from "../../../public/icons/check.svg";
 import { CLIENTS, PRICING_CARDS, PRICING_PLANS, USERS } from "@/lib/constants";
-import { randomUUID } from "crypto";
 import clsx from "clsx";
 import TitleSection from "@/components/landing-page/title-section";
 import { twMerge } from "tailwind-merge";
@@ -239,7 +238,7 @@ const HomePage = () => {
           />
           {[...Array(2)].map((arr, index) => (
             <div
-              key={randomUUID()}
+              key={`testimonial-row-${index}`}
               className={twMerge(
                 clsx("mt-10 flex flex-nowrap gap-6 self-start", {
                   "flex-row-reverse": index === 1,
